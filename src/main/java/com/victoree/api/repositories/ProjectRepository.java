@@ -10,11 +10,11 @@ public interface ProjectRepository{
 
   Page<Project> findAll(Query query, Pageable pageable);
 
-  Project findOne(String userName, Map<String, String> filters);
+  Project findOne(String username, Map<String, String> filters);
 
   Project save(Project project);
 
-  long update(String userName, Project project);
+  long update(String username, Project project);
 
-  long delete(String userName, String id);
+  long delete(String username, String id);
 }

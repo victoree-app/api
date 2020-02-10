@@ -30,9 +30,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
   }
 
   @Override
-  public Project findOne(String userName, Map<String, String> filters) {
+  public Project findOne(String username, Map<String, String> filters) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("owner").is(userName));
+    query.addCriteria(Criteria.where("owner").is(username));
 
     filters.keySet()
         .stream()
@@ -48,21 +48,21 @@ public class ProjectRepositoryImpl implements ProjectRepository {
   }
 
   @Override
-  public long update(String userName, Project project) {
+  public long update(String username, Project project) {
     Update update = new Update()
         .set("name",project.getName())
         .set("owner", project.getOwner())
         .set("description", project.getDescription())
         .set("isActive",project.isActive());
-    UpdateResult updateResult =  mongoTemplate.upsert(new Query().addCriteria(Criteria.where("owner").is(userName))
+    UpdateResult updateResult =  mongoTemplate.upsert(new Query().addCriteria(Criteria.where("owner").is(username))
         .addCriteria(Criteria.where("id").is(project.getId())),update,Project.class,"project");
         return updateResult.getModifiedCount();
   }
 
   @Override
-  public long delete(String userName, String id) {
+  public long delete(String username, String id) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("owner").is(userName))
+    query.addCriteria(Criteria.where("owner").is(username))
         .addCriteria(Criteria.where("_id").is(id));
     DeleteResult deleteResult = mongoTemplate.remove(query,Project.class,"project");
     return deleteResult.getDeletedCount();

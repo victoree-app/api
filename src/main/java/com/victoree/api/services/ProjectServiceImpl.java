@@ -33,8 +33,8 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public long update(String userName, Project project) {
-    long updateCount =  projectRepository.update(userName,project);
+  public long update(String username, Project project) {
+    long updateCount =  projectRepository.update(username,project);
     log.info("{} rows updated", updateCount);
     return updateCount;
   }
@@ -48,7 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public long delete(String userName, String id) {
-    return projectRepository.delete(userName, id);
+  public long delete(String username, String id) {
+    return projectRepository.delete(username, id);
   }
 }

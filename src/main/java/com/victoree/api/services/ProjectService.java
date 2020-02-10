@@ -6,13 +6,13 @@ import org.springframework.data.domain.Page;
 
 public interface ProjectService {
 
-  Page<Project> getAll(String userName, int pageNum, int pageSize) throws UnauthorizedRequestException;
+  Page<Project> getAll(String username, int pageNum, int pageSize) throws UnauthorizedRequestException;
 
   Project save(Project project);
 
-  long update(String userName, Project project);
+  long update(String username, Project project);
 
-  Project getOne(String userName, String id);
+  Project getOne(String username, String id);
 
-  long delete(String userName, String id);
+  long delete(String username, String id);
 }

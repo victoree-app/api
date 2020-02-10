@@ -2,7 +2,6 @@ package com.victoree.api.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.internal.xsom.impl.UName;
 import com.victoree.api.domains.Project;
 import com.victoree.api.domains.ProjectResponse;
 import com.victoree.api.domains.ProjectSaveRequest;
@@ -33,12 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:9000", maxAge = 3600, allowedHeaders = "*")
 public class ProjectController {
 
-  //create
-  //update
-  //delete
-  //list
-  //search
-
   @Autowired
   private ProjectService projectService;
 
@@ -57,11 +50,11 @@ public class ProjectController {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
     try {
-      String userName = authenticationService.getUserNameFromSessionId(sessionId);
-      if (userName == null) {
+      String username = authenticationService.getUserNameFromSessionId(sessionId);
+      if (username == null) {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
       }
-      Page<Project> projects = projectService.getAll(userName, pageNum, pageSize);
+      Page<Project> projects = projectService.getAll(username, pageNum, pageSize);
       if (projects == null || projects.getTotalElements() == 0) {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
       }
@@ -79,11 +72,11 @@ public class ProjectController {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
     try {
-      String userName = authenticationService.getUserNameFromSessionId(sessionId);
-      if (userName == null) {
+      String username = authenticationService.getUserNameFromSessionId(sessionId);
+      if (username == null) {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
       }
-      Project project = projectService.getOne(userName, id);
+      Project project = projectService.getOne(username, id);
       if(project == null) {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
       }
@@ -105,11 +98,11 @@ public class ProjectController {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
     try {
-      String userName = authenticationService.getUserNameFromSessionId(sessionId);
-      if (userName == null) {
+      String username = authenticationService.getUserNameFromSessionId(sessionId);
+      if (username == null) {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
       }
-      if (!projectSaveRequest.getProject().getOwner().equals(userName)) {
+      if (!projectSaveRequest.getProject().getOwner().equals(username)) {
         return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
       }
       Project savedProject = projectService.save(projectSaveRequest.getProject());
@@ -134,14 +127,14 @@ public class ProjectController {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
     try {
-      String userName = authenticationService.getUserNameFromSessionId(sessionId);
-      if (userName == null) {
+      String username = authenticationService.getUserNameFromSessionId(sessionId);
+      if (username == null) {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
       }
-      if (!projectUpdateRequest.getProject().getOwner().equalsIgnoreCase(userName)) {
+      if (!projectUpdateRequest.getProject().getOwner().equalsIgnoreCase(username)) {
         return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      projectService.update(userName, projectUpdateRequest.getProject());
+      projectService.update(username, projectUpdateRequest.getProject());
       return ResponseEntity.ok().build();
     } catch (UnauthorizedRequestException e) {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -158,15 +151,15 @@ public class ProjectController {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
     try {
-      String userName = authenticationService.getUserNameFromSessionId(sessionId);
-      if (userName == null) {
+      String username = authenticationService.getUserNameFromSessionId(sessionId);
+      if (username == null) {
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
       }
-      Project project = projectService.getOne(userName,id);
+      Project project = projectService.getOne(username,id);
       if(project == null) {
         return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      long deleteCount = projectService.delete(userName, id);
+      long deleteCount = projectService.delete(username, id);
       if(deleteCount > 0) {
         return ResponseEntity.ok().build();
       } else {
