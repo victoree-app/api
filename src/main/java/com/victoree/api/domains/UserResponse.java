@@ -1,6 +1,7 @@
 package com.victoree.api.domains;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
+
+  public UserResponse(String username) {
+    this.username = username;
+  }
   private String username;
+  private List<String> usernames;
 }
