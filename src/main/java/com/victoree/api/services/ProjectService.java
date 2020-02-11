@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 
 public interface ProjectService {
 
-  Page<Project> getAll(String username, int pageNum, int pageSize) throws UnauthorizedRequestException;
+  Page<Project> getAll(String username, int pageNum, int pageSize, String sortBy,
+      Integer order)
+      throws UnauthorizedRequestException;
 
   Project save(Project project);
 

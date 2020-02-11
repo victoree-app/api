@@ -42,6 +42,8 @@ public class ProjectController {
   @GetMapping("/projects")
   public ResponseEntity getAll(@RequestParam("page") int pageNum,
       @RequestParam("size") int pageSize,
+      @RequestParam(value = "sort", required = false) String sortBy,
+      @RequestParam(value = "order", required = false) Integer order,
       @RequestHeader Map<String, String> headers) throws UnauthorizedRequestException {
     String sessionId = headers.getOrDefault("sessionid", null);
     if (sessionId == null) {
@@ -51,7 +53,8 @@ public class ProjectController {
     if (username == null) {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
-    Page<Project> projects = projectService.getAll(username, pageNum, pageSize);
+
+    Page<Project> projects = projectService.getAll(username, pageNum, pageSize, sortBy, order);
     if (projects == null || projects.getTotalElements() == 0) {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

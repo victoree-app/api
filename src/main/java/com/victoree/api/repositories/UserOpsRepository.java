@@ -1,7 +1,7 @@
 package com.victoree.api.repositories;
 
 
-import static com.victoree.api.VictoreeConstants.CN_PERMISSION;
+import static com.victoree.api.constants.VictoreeConstants.CN_PERMISSION;
 
 import com.victoree.api.domains.Permission;
 import com.victoree.api.domains.User;
