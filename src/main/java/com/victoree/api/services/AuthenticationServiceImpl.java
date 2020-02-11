@@ -18,11 +18,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   @Override
   public AuthenticationResponse authenticate(LoginRequest loginRequest)
       throws UnauthorizedLoginException {
-    return authenticationRepository.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+    AuthSession authSession = authenticationRepository
+        .authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+    AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+    authenticationResponse.setSessionId(authSession.getSessionId());
+    return authenticationResponse;
   }
 
   @Override
-  public String getUserNameFromSessionId(String sessionId) throws UnauthorizedRequestException {
+  public String getUserNameFromSessionId(String sessionId)
+      throws UnauthorizedRequestException {
     AuthSession session = authenticationRepository.findSessionById(sessionId);
     return session.getUsername();
   }

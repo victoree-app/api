@@ -23,21 +23,16 @@ public class AuthenticationController {
   private AuthenticationService authenticationService;
 
   @PutMapping("/login")
-  public ResponseEntity attemptLogin(@RequestBody LoginRequest loginRequest) {
-    if(ValidatorUtil.validate(loginRequest, loginRequest.getClass())) {
+  public ResponseEntity attemptLogin(@RequestBody LoginRequest loginRequest)
+      throws UnauthorizedLoginException {
+    if (ValidatorUtil.validate(loginRequest, loginRequest.getClass())) {
       return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
     AuthenticationResponse authenticationResponse = null;
-    try {
-      authenticationResponse
-          = authenticationService.authenticate(loginRequest);
-    } catch (UnauthorizedLoginException e) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
+    authenticationResponse
+        = authenticationService.authenticate(loginRequest);
     return ResponseEntity.ok(authenticationResponse);
   }
-
-
 
 
 }

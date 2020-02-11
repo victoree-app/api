@@ -1,6 +1,8 @@
 package com.victoree.api.repositories;
 
 
+import static com.victoree.api.VictoreeConstants.CN_PERMISSION;
+
 import com.victoree.api.domains.Permission;
 import com.victoree.api.domains.User;
 import com.victoree.api.domains.UserDetail;
@@ -13,7 +15,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import static com.victoree.api.VictoreeConstants.CN_PERMISSION;
 @Repository
 public class UserOpsRepository {
 
@@ -24,21 +25,22 @@ public class UserOpsRepository {
   public Set<String> getPermissionsForUser(String username) {
     Query query = new Query();
     query.addCriteria(Criteria.where("username").is(username));
-    UserDetail userDetail = mongoTemplate.findOne(query, UserDetail.class,"userdetail");
-    String permissionGroup =  userDetail.getPermissionGroup();
+    UserDetail userDetail = mongoTemplate.find(query, UserDetail.class, "userdetail").get(0);
+    String permissionGroup = userDetail.getPermissionGroup();
 
     query = new Query();
     query.addCriteria(Criteria.where("group").is(permissionGroup));
-    List<Permission> permissions = mongoTemplate.find(query,Permission.class, CN_PERMISSION);
+    List<Permission> permissions = mongoTemplate.find(query, Permission.class, CN_PERMISSION);
 
     return permissions.stream()
         .map(permission -> permission.getPermission())
         .collect(Collectors.toSet());
   }
+
   public List<User> findActiveUsers() {
     Query query = new Query();
     query.addCriteria(Criteria.where("status").is("A"));
-    List<User> users = mongoTemplate.find(query, User.class,"user");
+    List<User> users = mongoTemplate.find(query, User.class, "user");
     return users;
   }
 }

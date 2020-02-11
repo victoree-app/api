@@ -24,39 +24,40 @@ public class ProjectRepositoryImpl implements ProjectRepository {
   @Override
   public Page<Project> findAll(Query query, Pageable pageable) {
     query.with(pageable);
-    List<Project> projects =  mongoTemplate.find(query,Project.class,"project");
-    return PageableExecutionUtils.getPage(projects,pageable,
-        () -> mongoTemplate.count(query,Project.class));
+    List<Project> projects = mongoTemplate.find(query, Project.class, "project");
+    return PageableExecutionUtils.getPage(projects, pageable,
+        () -> mongoTemplate.count(query, Project.class));
   }
 
   @Override
   public Project findOne(String username, Map<String, String> filters) {
     Query query = new Query();
     query.addCriteria(Criteria.where("owner").is(username));
-
     filters.keySet()
         .stream()
         .forEach(k -> query.addCriteria(Criteria.where(k).is(filters.get(k))));
 
-    Project project = mongoTemplate.findOne(query,Project.class,"project");
+    Project project = mongoTemplate.findOne(query, Project.class, "project");
     return project;
   }
 
   @Override
   public Project save(Project project) {
-    return mongoTemplate.save(project,"project");
+    return mongoTemplate.save(project, "project");
   }
 
   @Override
   public long update(String username, Project project) {
     Update update = new Update()
-        .set("name",project.getName())
+        .set("name", project.getName())
         .set("owner", project.getOwner())
         .set("description", project.getDescription())
-        .set("isActive",project.isActive());
-    UpdateResult updateResult =  mongoTemplate.upsert(new Query().addCriteria(Criteria.where("owner").is(username))
-        .addCriteria(Criteria.where("id").is(project.getId())),update,Project.class,"project");
-        return updateResult.getModifiedCount();
+        .set("isActive", project.isActive());
+    UpdateResult updateResult = mongoTemplate
+        .upsert(new Query().addCriteria(Criteria.where("owner").is(username))
+                .addCriteria(Criteria.where("id").is(project.getId())), update, Project.class,
+            "project");
+    return updateResult.getModifiedCount();
   }
 
   @Override
@@ -64,7 +65,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     Query query = new Query();
     query.addCriteria(Criteria.where("owner").is(username))
         .addCriteria(Criteria.where("_id").is(id));
-    DeleteResult deleteResult = mongoTemplate.remove(query,Project.class,"project");
+    DeleteResult deleteResult = mongoTemplate.remove(query, Project.class, "project");
     return deleteResult.getDeletedCount();
   }
 }

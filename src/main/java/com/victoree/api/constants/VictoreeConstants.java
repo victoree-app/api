@@ -1,4 +1,4 @@
-package com.victoree.api;
+package com.victoree.api.constants;
 
 public class VictoreeConstants {
 
