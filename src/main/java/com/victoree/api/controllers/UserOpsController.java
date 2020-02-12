@@ -1,8 +1,8 @@
 package com.victoree.api.controllers;
 
 import com.victoree.api.domains.User;
-import com.victoree.api.domains.UserResponse;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
+import com.victoree.api.io.UserResponse;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.UserOpsService;
 import java.util.ArrayList;

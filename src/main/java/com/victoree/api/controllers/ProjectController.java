@@ -1,10 +1,10 @@
 package com.victoree.api.controllers;
 
 import com.victoree.api.domains.Project;
-import com.victoree.api.domains.ProjectResponse;
-import com.victoree.api.domains.ProjectSaveRequest;
-import com.victoree.api.domains.ProjectUpdateRequest;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
+import com.victoree.api.io.ProjectResponse;
+import com.victoree.api.io.ProjectSaveRequest;
+import com.victoree.api.io.ProjectUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.ProjectService;
 import com.victoree.api.validator.ValidatorUtil;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,7 +91,7 @@ public class ProjectController extends AbstractRestController {
     return ResponseEntity.ok().build();
   }
 
-  @PostMapping("/projects/id/{id}")
+  @DeleteMapping("/projects/id/{id}")
   public ResponseEntity deleteProject(@PathVariable("id") String id,
       @RequestHeader Map<String, String> headers) throws UnauthorizedRequestException {
     setHeaders(headers);

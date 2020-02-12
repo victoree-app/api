@@ -1,9 +1,9 @@
 package com.victoree.api.services;
 
-import com.victoree.api.domains.AuthenticationResponse;
-import com.victoree.api.domains.LoginRequest;
 import com.victoree.api.exceptions.UnauthorizedLoginException;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
+import com.victoree.api.io.AuthenticationResponse;
+import com.victoree.api.io.LoginRequest;
 
 public interface AuthenticationService {
 

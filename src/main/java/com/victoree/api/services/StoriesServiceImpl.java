@@ -29,4 +29,19 @@ public class StoriesServiceImpl implements StoriesService {
   public Story save(Story story) {
     return storiesRepository.save(story);
   }
+
+  @Override
+  public Story getOne(String id) {
+    return storiesRepository.findOne(id);
+  }
+
+  @Override
+  public long update(String id, Story story) {
+    return storiesRepository.update(id, story);
+  }
+
+  @Override
+  public long delete(String id) {
+    return storiesRepository.delete(id);
+  }
 }

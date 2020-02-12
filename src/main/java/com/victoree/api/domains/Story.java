@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "story")
 public class Story {
 
+  private String id;
   private String title;
   private String description;
   private String assignee;

@@ -1,8 +1,8 @@
 package com.victoree.api.controllers;
 
-import com.victoree.api.domains.AuthenticationResponse;
-import com.victoree.api.domains.LoginRequest;
 import com.victoree.api.exceptions.UnauthorizedLoginException;
+import com.victoree.api.io.AuthenticationResponse;
+import com.victoree.api.io.LoginRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.validator.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;

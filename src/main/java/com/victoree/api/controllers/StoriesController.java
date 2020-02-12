@@ -3,6 +3,7 @@ package com.victoree.api.controllers;
 import com.victoree.api.domains.Story;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
 import com.victoree.api.io.StorySaveRequest;
+import com.victoree.api.io.StoryUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.StoriesService;
 import java.util.Map;
@@ -13,8 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +58,44 @@ public class StoriesController extends AbstractRestController {
     setHeaders(headers);
     Story story = storiesService.save(storySaveRequest.getStory());
     return ResponseEntity.created(null).build();
+  }
+
+  @PutMapping("/stories")
+  public ResponseEntity editStory(@RequestHeader Map<String, String> headers,
+      @RequestParam("id") String id,
+      @RequestBody StoryUpdateRequest storyUpdateRequest)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    if (id == null) {
+      return ResponseEntity.badRequest().build();
+    }
+    Story story = storiesService.getOne(id);
+    if (story == null) {
+      return ResponseEntity.unprocessableEntity().build();
+    }
+    long count = storiesService.update(id, storyUpdateRequest.getStory());
+    if (count != 0) {
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.unprocessableEntity().build();
+  }
+
+  @DeleteMapping("/stories")
+  public ResponseEntity deleteStory(@RequestHeader Map<String, String> headers,
+      @RequestParam("id") String id) throws UnauthorizedRequestException {
+    setHeaders(headers);
+    if (id == null) {
+      return ResponseEntity.badRequest().build();
+    }
+    Story story = storiesService.getOne(id);
+    if (story == null) {
+      return ResponseEntity.unprocessableEntity().build();
+    }
+    long count = storiesService.delete(id);
+    if (count > 0) {
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.unprocessableEntity().build();
   }
 
   @Override

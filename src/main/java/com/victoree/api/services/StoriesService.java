@@ -9,4 +9,10 @@ public interface StoriesService {
   Page<Story> getAll(String username, Boolean linked, Pageable pageable);
 
   Story save(Story story);
+
+  Story getOne(String id);
+
+  long update(String id, Story story);
+
+  long delete(String id);
 }
