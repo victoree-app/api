@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,54 +20,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "http://localhost:9000")
-public class UserOpsController {
+public class UserOpsController extends AbstractRestController {
 
   // register
   // forgot password
   // update profile
   // delete user account
   @Autowired
-  UserOpsService userOpsService;
+  private UserOpsService userOpsService;
 
   @Autowired
   private AuthenticationService authenticationService;
 
 
   @GetMapping("/users")
-  public ResponseEntity getAllUsers(@RequestHeader Map<String, String> headers) {
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
+  public ResponseEntity getAllUsers(@RequestHeader Map<String, String> headers)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
     List<User> userList = new ArrayList<>();
-    try {
-      userList = userOpsService.getAllUsers(sessionId);
-    } catch (UnauthorizedRequestException e) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
+    userList = userOpsService.getAllUsers(getSessionId());
     UserResponse userResponse = new UserResponse();
     userResponse.setUsernames(userList.stream()
         .map(user -> user.getUsername())
         .collect(Collectors.toList()));
+    userResponse.setUsername(getUsername());
     return ResponseEntity.ok(userResponse);
 
   }
 
 
   @GetMapping("/user")
-  public ResponseEntity getUser(@RequestHeader Map<String, String> headers) {
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    try {
-      String username = userOpsService.getUserNameFromSessionId(sessionId);
-      if (username == null) {
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-      }
-      return ResponseEntity.ok(new UserResponse(username));
-    } catch (UnauthorizedRequestException e) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
+  public ResponseEntity getUser(@RequestHeader Map<String, String> headers)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    return ResponseEntity.ok(new UserResponse(getUsername()));
+
+  }
+
+  @Override
+  protected AuthenticationService getAuthenticationService() {
+    return this.authenticationService;
   }
 }

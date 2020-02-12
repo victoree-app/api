@@ -43,7 +43,7 @@ public class AuthenticationRepositoryImpl implements AuthenticationRepository {
   public AuthSession findSessionById(String sessionId) throws UnauthorizedRequestException {
     Query query = new Query();
     query.addCriteria(Criteria.where("sessionId").is(sessionId));
-    AuthSession authSession = mongoTemplate.find(query, AuthSession.class, "session").get(0);
+    AuthSession authSession = mongoTemplate.findOne(query, AuthSession.class, "session");
     if (authSession == null) {
       throw new UnauthorizedRequestException("no session active");
     }

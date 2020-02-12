@@ -1,6 +1,5 @@
-package com.victoree.api.domains;
+package com.victoree.api.io;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponse {
+
   private String sessionId;
 }

@@ -10,7 +10,6 @@ import com.victoree.api.services.ProjectService;
 import com.victoree.api.validator.ValidatorUtil;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "http://localhost:9000", maxAge = 3600, allowedHeaders = "*")
-public class ProjectController {
+public class ProjectController extends AbstractRestController {
 
   @Autowired
   private ProjectService projectService;
@@ -36,25 +35,14 @@ public class ProjectController {
   @Autowired
   private AuthenticationService authenticationService;
 
-  @Value("${test.value}")
-  private String value;
-
   @GetMapping("/projects")
   public ResponseEntity getAll(@RequestParam("page") int pageNum,
       @RequestParam("size") int pageSize,
       @RequestParam(value = "sort", required = false) String sortBy,
       @RequestParam(value = "order", required = false) Integer order,
       @RequestHeader Map<String, String> headers) throws UnauthorizedRequestException {
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    String username = authenticationService.getUserNameFromSessionId(sessionId);
-    if (username == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-
-    Page<Project> projects = projectService.getAll(username, pageNum, pageSize, sortBy, order);
+    setHeaders(headers);
+    Page<Project> projects = projectService.getAll(getUsername(), pageNum, pageSize, sortBy, order);
     if (projects == null || projects.getTotalElements() == 0) {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -64,15 +52,8 @@ public class ProjectController {
   @GetMapping("/projects/id/{id}")
   public ResponseEntity getOne(@PathVariable("id") String id,
       @RequestHeader Map<String, String> headers) throws UnauthorizedRequestException {
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    String username = authenticationService.getUserNameFromSessionId(sessionId);
-    if (username == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    Project project = projectService.getOne(username, id);
+    setHeaders(headers);
+    Project project = projectService.getOne(getUsername(), id);
     if (project == null) {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -82,18 +63,11 @@ public class ProjectController {
   @PostMapping("/projects")
   public ResponseEntity saveProject(@RequestHeader Map<String, String> headers,
       @RequestBody ProjectSaveRequest projectSaveRequest) throws UnauthorizedRequestException {
+    setHeaders(headers);
     if (ValidatorUtil.validate(projectSaveRequest, projectSaveRequest.getClass())) {
       return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    String username = authenticationService.getUserNameFromSessionId(sessionId);
-    if (username == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    if (!projectSaveRequest.getProject().getOwner().equals(username)) {
+    if (!projectSaveRequest.getProject().getOwner().equals(getUsername())) {
       return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
     }
     Project savedProject = projectService.save(projectSaveRequest.getProject());
@@ -107,48 +81,37 @@ public class ProjectController {
   @PutMapping("/projects")
   public ResponseEntity updateProject(@RequestHeader Map<String, String> headers,
       @RequestBody ProjectUpdateRequest projectUpdateRequest) throws UnauthorizedRequestException {
-    if (ValidatorUtil.validate(projectUpdateRequest, projectUpdateRequest.getClass())) {
+    setHeaders(headers);
+    if (ValidatorUtil.validate(projectUpdateRequest, projectUpdateRequest.getClass()) ||
+        !projectUpdateRequest.getProject().getOwner().equalsIgnoreCase(getUsername())) {
       return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    String username = authenticationService.getUserNameFromSessionId(sessionId);
-    if (username == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    if (!projectUpdateRequest.getProject().getOwner().equalsIgnoreCase(username)) {
-      return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-    projectService.update(username, projectUpdateRequest.getProject());
+    projectService.update(getUsername(), projectUpdateRequest.getProject());
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/projects/id/{id}")
   public ResponseEntity deleteProject(@PathVariable("id") String id,
       @RequestHeader Map<String, String> headers) throws UnauthorizedRequestException {
+    setHeaders(headers);
     if (id == null) {
       return ResponseEntity.badRequest().build();
     }
-    String sessionId = headers.getOrDefault("sessionid", null);
-    if (sessionId == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    String username = authenticationService.getUserNameFromSessionId(sessionId);
-    if (username == null) {
-      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    }
-    Project project = projectService.getOne(username, id);
+    Project project = projectService.getOne(getUsername(), id);
     if (project == null) {
       return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
     }
-    long deleteCount = projectService.delete(username, id);
+    long deleteCount = projectService.delete(getUsername(), id);
     if (deleteCount > 0) {
       return ResponseEntity.ok().build();
     } else {
       return new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
     }
+  }
+
+  @Override
+  protected AuthenticationService getAuthenticationService() {
+    return this.authenticationService;
   }
 }
 

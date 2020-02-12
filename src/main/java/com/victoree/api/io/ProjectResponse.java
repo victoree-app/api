@@ -1,5 +1,6 @@
-package com.victoree.api.domains;
+package com.victoree.api.io;
 
+import com.victoree.api.domains.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
