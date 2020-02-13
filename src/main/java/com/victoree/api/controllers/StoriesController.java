@@ -2,6 +2,7 @@ package com.victoree.api.controllers;
 
 import com.victoree.api.domains.Story;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
+import com.victoree.api.io.StoryResponse;
 import com.victoree.api.io.StorySaveRequest;
 import com.victoree.api.io.StoryUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "http://localhost:9000", maxAge = 3600, allowedHeaders = "*")
+@CrossOrigin(origins = "*", maxAge = 3600, allowedHeaders = "*")
 public class StoriesController extends AbstractRestController {
 
   @Autowired
@@ -50,6 +52,14 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.ok(stories);
   }
 
+  @GetMapping("/stories/id/{id}")
+  public ResponseEntity getStory(@RequestHeader Map<String, String> headers,
+      @PathVariable("id") String id) throws UnauthorizedRequestException {
+    setHeaders(headers);
+    Story story = storiesService.getOne(id);
+    return ResponseEntity.ok(new StoryResponse(story));
+  }
+
 
   @PostMapping("/stories")
   public ResponseEntity saveStory(@RequestBody StorySaveRequest storySaveRequest,
@@ -62,18 +72,14 @@ public class StoriesController extends AbstractRestController {
 
   @PutMapping("/stories")
   public ResponseEntity editStory(@RequestHeader Map<String, String> headers,
-      @RequestParam("id") String id,
       @RequestBody StoryUpdateRequest storyUpdateRequest)
       throws UnauthorizedRequestException {
     setHeaders(headers);
-    if (id == null) {
-      return ResponseEntity.badRequest().build();
-    }
-    Story story = storiesService.getOne(id);
+    Story story = storiesService.getOne(storyUpdateRequest.getStory().getId());
     if (story == null) {
       return ResponseEntity.unprocessableEntity().build();
     }
-    long count = storiesService.update(id, storyUpdateRequest.getStory());
+    long count = storiesService.update(storyUpdateRequest.getStory());
     if (count != 0) {
       return ResponseEntity.ok().build();
     }

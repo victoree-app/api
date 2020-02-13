@@ -32,9 +32,9 @@ public class StoriesRepository {
     return mongoTemplate.save(story, "story");
   }
 
-  public long update(String id, Story story) {
+  public long update(Story story) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("_id").is(id));
+    query.addCriteria(Criteria.where("_id").is(story.getId()));
     Update update = new Update()
         .set("title", story.getTitle())
         .set("description", story.getDescription())

@@ -12,7 +12,7 @@ public interface StoriesService {
 
   Story getOne(String id);
 
-  long update(String id, Story story);
+  long update(Story story);
 
   long delete(String id);
 }

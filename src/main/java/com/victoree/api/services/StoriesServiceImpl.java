@@ -36,8 +36,8 @@ public class StoriesServiceImpl implements StoriesService {
   }
 
   @Override
-  public long update(String id, Story story) {
-    return storiesRepository.update(id, story);
+  public long update(Story story) {
+    return storiesRepository.update(story);
   }
 
   @Override
