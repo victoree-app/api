@@ -4,6 +4,7 @@ import com.victoree.api.domains.Project;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
 import com.victoree.api.repositories.ProjectRepository;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,10 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public long delete(String username, String id) {
     return projectRepository.delete(username, id);
+  }
+
+  @Override
+  public List<Project> getAll(String username) {
+    return projectRepository.findAll(username);
   }
 }

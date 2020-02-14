@@ -7,6 +7,7 @@ import com.victoree.api.io.StorySaveRequest;
 import com.victoree.api.io.StoryUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.StoriesService;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class StoriesController extends AbstractRestController {
   private AuthenticationService authenticationService;
 
   @GetMapping("/stories")
-  public ResponseEntity getAllStories(@RequestHeader Map<String, String> headers,
+  public ResponseEntity getAllStoriesPaged(@RequestHeader Map<String, String> headers,
       @RequestParam("page") int pageNum,
       @RequestParam("size") int pageSize,
       @RequestParam(value = "sort", defaultValue = "_id") String sortBy,
@@ -50,6 +51,16 @@ public class StoriesController extends AbstractRestController {
         .of(pageNum, pageSize, order == 1 ? Direction.ASC : Direction.DESC, sortBy);
     Page<Story> stories = storiesService.getAll(getUsername(), linked, pageable);
     return ResponseEntity.ok(stories);
+  }
+
+  @GetMapping("/stories/all")
+  public ResponseEntity getAllStories(@RequestHeader Map<String, String> headers)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    boolean linked = false;
+    List<Story> stories = storiesService.getAll(getUsername(), linked);
+    return ResponseEntity.ok(stories);
+
   }
 
   @GetMapping("/stories/id/{id}")

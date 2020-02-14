@@ -8,6 +8,7 @@ import com.victoree.api.io.ProjectUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.ProjectService;
 import com.victoree.api.validator.ValidatorUtil;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class ProjectController extends AbstractRestController {
   private AuthenticationService authenticationService;
 
   @GetMapping("/projects")
-  public ResponseEntity getAll(@RequestParam("page") int pageNum,
+  public ResponseEntity getAllPaged(@RequestParam("page") int pageNum,
       @RequestParam("size") int pageSize,
       @RequestParam(value = "sort", required = false) String sortBy,
       @RequestParam(value = "order", required = false) Integer order,
@@ -47,6 +48,14 @@ public class ProjectController extends AbstractRestController {
     if (projects == null || projects.getTotalElements() == 0) {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+    return ResponseEntity.ok(projects);
+  }
+
+  @GetMapping("/projects/all")
+  public ResponseEntity getAll(@RequestHeader Map<String, String> headers)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    List<Project> projects = projectService.getAll(getUsername());
     return ResponseEntity.ok(projects);
   }
 

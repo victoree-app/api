@@ -1,6 +1,7 @@
 package com.victoree.api.services;
 
 import com.victoree.api.domains.Story;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,4 +16,6 @@ public interface StoriesService {
   long update(Story story);
 
   long delete(String id);
+
+  List<Story> getAll(String username, boolean linked);
 }

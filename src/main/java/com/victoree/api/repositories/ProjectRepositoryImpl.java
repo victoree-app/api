@@ -68,4 +68,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     DeleteResult deleteResult = mongoTemplate.remove(query, Project.class, "project");
     return deleteResult.getDeletedCount();
   }
+
+  @Override
+  public List<Project> findAll(String username) {
+    Query query = new Query();
+    query.addCriteria(Criteria.where("owner").is(username));
+    return mongoTemplate.find(query, Project.class, "project");
+  }
 }
