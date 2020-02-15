@@ -6,6 +6,7 @@ import com.victoree.api.io.EpicSaveRequest;
 import com.victoree.api.io.EpicUpdateRequest;
 import com.victoree.api.services.AuthenticationService;
 import com.victoree.api.services.EpicService;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,14 @@ public class EpicController extends AbstractRestController {
       throws UnauthorizedRequestException {
     setHeaders(headers);
     Page<Epic> epics = epicService.getAllEpics(projectId, PageRequest.of(page, size));
+    return ResponseEntity.ok(epics);
+  }
+
+  @GetMapping("/epics/all")
+  public ResponseEntity getAllEpicsNoFilters(@RequestHeader Map<String, String> headers)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    List<Epic> epics = epicService.getAllNoFilter();
     return ResponseEntity.ok(epics);
   }
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,15 @@ public class SprintController extends AbstractRestController {
       throws UnauthorizedRequestException {
     setHeaders(headers);
     List<Sprint> sprints = sprintService.getAll();
+    return ResponseEntity.ok(sprints);
+  }
+
+  @GetMapping("/sprints")
+  public ResponseEntity getSprintById(@RequestHeader Map<String, String> headers,
+      @RequestParam("") String id)
+      throws UnauthorizedRequestException {
+    setHeaders(headers);
+    List<Sprint> sprints = sprintService.getSprintById(id);
     return ResponseEntity.ok(sprints);
   }
 

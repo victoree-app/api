@@ -60,7 +60,6 @@ public class StoriesController extends AbstractRestController {
     boolean linked = false;
     List<Story> stories = storiesService.getAll(getUsername(), linked);
     return ResponseEntity.ok(stories);
-
   }
 
   @GetMapping("/stories/id/{id}")
@@ -69,6 +68,14 @@ public class StoriesController extends AbstractRestController {
     setHeaders(headers);
     Story story = storiesService.getOne(id);
     return ResponseEntity.ok(new StoryResponse(story));
+  }
+
+  @GetMapping("/stories/list")
+  public ResponseEntity getStoriesFiltered(@RequestHeader Map<String, String> headers,
+      @RequestParam("epicid") String epicid) throws UnauthorizedRequestException {
+    setHeaders(headers);
+    List<Story> stories = storiesService.getStoriesFiltered(epicid);
+    return ResponseEntity.ok(stories);
   }
 
 

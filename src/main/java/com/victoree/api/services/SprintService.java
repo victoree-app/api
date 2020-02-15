@@ -7,4 +7,6 @@ import java.util.List;
 public interface SprintService {
 
   List<Sprint> getAll();
+
+  List<Sprint> getSprintById(String id);
 }

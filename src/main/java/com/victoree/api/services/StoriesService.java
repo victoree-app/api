@@ -18,4 +18,6 @@ public interface StoriesService {
   long delete(String id);
 
   List<Story> getAll(String username, boolean linked);
+
+  List<Story> getStoriesFiltered(String epicid);
 }

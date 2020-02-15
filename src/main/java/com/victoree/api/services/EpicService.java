@@ -1,6 +1,7 @@
 package com.victoree.api.services;
 
 import com.victoree.api.domains.Epic;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -15,4 +16,6 @@ public interface EpicService {
   long update(Epic epic);
 
   long delete(String id);
+
+  List<Epic> getAllNoFilter();
 }

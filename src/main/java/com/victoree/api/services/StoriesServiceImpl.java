@@ -54,4 +54,11 @@ public class StoriesServiceImpl implements StoriesService {
         .addCriteria(Criteria.where("orphan").is(true));
     return storiesRepository.findAll(query);
   }
+
+  @Override
+  public List<Story> getStoriesFiltered(String epicid) {
+    Query query = new Query();
+    query.addCriteria(Criteria.where("epicid").is(epicid));
+    return storiesRepository.findAll(query);
+  }
 }

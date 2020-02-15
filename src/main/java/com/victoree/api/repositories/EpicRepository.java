@@ -62,4 +62,8 @@ public class EpicRepository {
     DeleteResult deleteResult = mongoTemplate.remove(query, Epic.class, EPIC);
     return deleteResult.getDeletedCount();
   }
+
+  public List<Epic> findAll() {
+    return mongoTemplate.findAll(Epic.class, "epic");
+  }
 }
