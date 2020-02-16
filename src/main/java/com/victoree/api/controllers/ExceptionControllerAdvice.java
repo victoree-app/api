@@ -19,4 +19,6 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, bodyOfResponse,
         new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
   }
+  //  to handle NullPointerException better.
+
 }

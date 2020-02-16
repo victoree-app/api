@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/stories")
 @CrossOrigin(origins = "*", maxAge = 3600, allowedHeaders = "*")
 public class StoriesController extends AbstractRestController {
 
@@ -38,7 +38,7 @@ public class StoriesController extends AbstractRestController {
   @Autowired
   private AuthenticationService authenticationService;
 
-  @GetMapping("/stories")
+  @GetMapping
   public ResponseEntity getAllStoriesPaged(@RequestHeader Map<String, String> headers,
       @RequestParam("page") int pageNum,
       @RequestParam("size") int pageSize,
@@ -53,7 +53,7 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.ok(stories);
   }
 
-  @GetMapping("/stories/all")
+  @GetMapping("/all")
   public ResponseEntity getAllStories(@RequestHeader Map<String, String> headers)
       throws UnauthorizedRequestException {
     setHeaders(headers);
@@ -62,7 +62,7 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.ok(stories);
   }
 
-  @GetMapping("/stories/id/{id}")
+  @GetMapping("/id/{id}")
   public ResponseEntity getStory(@RequestHeader Map<String, String> headers,
       @PathVariable("id") String id) throws UnauthorizedRequestException {
     setHeaders(headers);
@@ -70,7 +70,7 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.ok(new StoryResponse(story));
   }
 
-  @GetMapping("/stories/list")
+  @GetMapping("/list")
   public ResponseEntity getStoriesFiltered(@RequestHeader Map<String, String> headers,
       @RequestParam("epicid") String epicid) throws UnauthorizedRequestException {
     setHeaders(headers);
@@ -79,7 +79,7 @@ public class StoriesController extends AbstractRestController {
   }
 
 
-  @PostMapping("/stories")
+  @PostMapping
   public ResponseEntity saveStory(@RequestBody StorySaveRequest storySaveRequest,
       @RequestHeader Map<String, String> headers)
       throws UnauthorizedRequestException {
@@ -88,7 +88,7 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.created(null).build();
   }
 
-  @PutMapping("/stories")
+  @PutMapping
   public ResponseEntity editStory(@RequestHeader Map<String, String> headers,
       @RequestBody StoryUpdateRequest storyUpdateRequest)
       throws UnauthorizedRequestException {
@@ -104,7 +104,7 @@ public class StoriesController extends AbstractRestController {
     return ResponseEntity.unprocessableEntity().build();
   }
 
-  @DeleteMapping("/stories")
+  @DeleteMapping
   public ResponseEntity deleteStory(@RequestHeader Map<String, String> headers,
       @RequestParam("id") String id) throws UnauthorizedRequestException {
     setHeaders(headers);

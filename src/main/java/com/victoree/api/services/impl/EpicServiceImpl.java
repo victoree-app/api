@@ -1,7 +1,8 @@
-package com.victoree.api.services;
+package com.victoree.api.services.impl;
 
 import com.victoree.api.domains.Epic;
 import com.victoree.api.repositories.EpicRepository;
+import com.victoree.api.services.EpicService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

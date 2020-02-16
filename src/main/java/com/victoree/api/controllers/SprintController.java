@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/sprints")
 @CrossOrigin(origins = "*", maxAge = 3600, allowedHeaders = "*")
 public class SprintController extends AbstractRestController {
 
@@ -26,7 +26,7 @@ public class SprintController extends AbstractRestController {
   @Autowired
   private SprintService sprintService;
 
-  @GetMapping("/sprints/all")
+  @GetMapping("/all")
   public ResponseEntity getAllSprints(@RequestHeader Map<String, String> headers)
       throws UnauthorizedRequestException {
     setHeaders(headers);
@@ -34,7 +34,7 @@ public class SprintController extends AbstractRestController {
     return ResponseEntity.ok(sprints);
   }
 
-  @GetMapping("/sprints")
+  @GetMapping
   public ResponseEntity getSprintById(@RequestHeader Map<String, String> headers,
       @RequestParam("") String id)
       throws UnauthorizedRequestException {

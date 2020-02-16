@@ -22,4 +22,19 @@ public class TaskServiceImpl implements TaskService {
   public long delete(String taskId) {
     return taskRepository.delete(taskId);
   }
+
+  @Override
+  public List<Task> getAllTasksById(String id) {
+    return taskRepository.getAllTasksById(id);
+  }
+
+  @Override
+  public long update(Task task) {
+    return taskRepository.update(task);
+  }
+
+  @Override
+  public Task create(Task task) {
+    return taskRepository.create(task);
+  }
 }

@@ -8,4 +8,10 @@ public interface TaskService {
   List<Task> getAllTasks(String storyid);
 
   long delete(String taskId);
+
+  List<Task> getAllTasksById(String id);
+
+  long update(Task task);
+
+  Task create(Task task);
 }

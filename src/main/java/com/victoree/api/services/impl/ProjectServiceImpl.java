@@ -1,8 +1,9 @@
-package com.victoree.api.services;
+package com.victoree.api.services.impl;
 
 import com.victoree.api.domains.Project;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
 import com.victoree.api.repositories.ProjectRepository;
+import com.victoree.api.services.ProjectService;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

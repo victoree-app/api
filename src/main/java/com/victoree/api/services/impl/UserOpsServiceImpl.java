@@ -1,8 +1,10 @@
-package com.victoree.api.services;
+package com.victoree.api.services.impl;
 
 import com.victoree.api.domains.User;
 import com.victoree.api.exceptions.UnauthorizedRequestException;
 import com.victoree.api.repositories.UserOpsRepository;
+import com.victoree.api.services.AuthenticationService;
+import com.victoree.api.services.UserOpsService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +29,7 @@ public class UserOpsServiceImpl implements UserOpsService {
 
     String username = authenticationService.getUserNameFromSessionId(sessionId);
     Set<String> permissions = userOpsRepository.getPermissionsForUser(username);
-    if(permissions.contains("viewusers")){
+    if (permissions.contains("viewusers")) {
       List<User> users = userOpsRepository.findActiveUsers();
       return users;
     }

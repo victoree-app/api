@@ -1,7 +1,8 @@
-package com.victoree.api.services;
+package com.victoree.api.services.impl;
 
 import com.victoree.api.domains.Story;
 import com.victoree.api.repositories.StoriesRepository;
+import com.victoree.api.services.StoriesService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
